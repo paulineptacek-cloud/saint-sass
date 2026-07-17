@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&amp;family=Jost:wght@300;400;500&amp;family=Sacramento&amp;family=Permanent+Marker&amp;display=swap" rel="stylesheet">
+<style>
+  :root{
+    --page:#F7F4EE;
+    --page-2:#F1ECE2;
+    --cream:#E8DCC8;
+    --espresso:#3B2416;
+    --choco:#241609;
+    --gold:#C9A961;
+    --terra:#B5623C;
+    --pink:#D9508A;
+    --pink-deep:#B23A6E;
+    --blue:#43606E;
+    --mocha:#6B5341;
+    --taupe:#9C8A75;
+    --line:rgba(59,36,22,.15);
+    --line-l:rgba(247,244,238,.22);
+    --font-disp:"Archivo",Helvetica,sans-serif;
+    --font-body:"Jost",system-ui,sans-serif;
+    --font-script:"Sacramento",cursive;
+    --disp-weight:800;
+    --disp-track:-.025em;
+    --maxw:1180px;
+    --sect-pad:clamp(66px,10vw,120px);
+    --ease:cubic-bezier(.22,1,.36,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:var(--font-body);background:var(--page);color:var(--espresso);
+    line-height:1.62;font-weight:400;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  ::selection{background:var(--espresso);color:var(--page)}
+  a{color:inherit;text-decoration:none}
+  a:hover{color:var(--terra)}
+  img,video{max-width:100%;display:block}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 30px}
+
+  .disp{font-family:var(--font-disp);font-weight:var(--disp-weight);text-transform:uppercase;letter-spacing:var(--disp-track);line-height:.94}
+  .script{font-family:var(--font-script);font-weight:400;text-transform:none;letter-spacing:0;line-height:1.1}
+  .label{font-family:var(--font-body);font-weight:500;text-transform:uppercase;letter-spacing:.26em;font-size:10.5px;color:var(--taupe)}
+  h1,h2,h3,h4{font-family:var(--font-disp);font-weight:var(--disp-weight);text-transform:uppercase;letter-spacing:var(--disp-track);line-height:.96}
+
+  .kw{display:inline-block;overflow:hidden;vertical-align:bottom;padding:0 .012em}
+  .kwi{display:inline-block;transform:translateY(112%);transition:transform .85s var(--ease);transition-delay:calc(var(--i,0)*.05s)}
+  .kinetic.in .kwi{transform:none}
+
+  #progress{position:fixed;top:0;left:0;height:2px;width:0%;background:var(--espresso);z-index:120;transition:width .12s linear}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:110;display:flex;align-items:center;justify-content:space-between;
+    padding:20px 30px;transition:background .5s var(--ease),padding .5s var(--ease)}
+  nav.scrolled{background:rgba(247,244,238,.92);backdrop-filter:blur(10px);padding:13px 30px;border-bottom:1px solid var(--line)}
+  nav{color:var(--page)}
+  nav.scrolled{color:var(--espresso)}
+  .brand{font-family:var(--font-disp);font-weight:800;text-transform:uppercase;letter-spacing:-.01em;font-size:15px}
+  .navlinks{display:flex;gap:1px;align-items:center}
+  .navlinks a{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;font-weight:400;padding:8px 11px;opacity:.65;transition:opacity .3s}
+  .navlinks a:hover{opacity:1}
+  .navtoggle{display:none;background:none;border:none;cursor:pointer;font-size:20px;color:inherit}
+
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+  .reveal.in{opacity:1;transform:none}
+  .stagger>*{opacity:0;transform:translateY(20px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+  .stagger.in>*{opacity:1;transform:none}
+  .stagger.in>*:nth-child(1){transition-delay:.04s}.stagger.in>*:nth-child(2){transition-delay:.12s}
+  .stagger.in>*:nth-child(3){transition-delay:.2s}.stagger.in>*:nth-child(4){transition-delay:.28s}
+  .stagger.in>*:nth-child(5){transition-delay:.36s}.stagger.in>*:nth-child(6){transition-delay:.44s}
+
+  .ph{position:relative;aspect-ratio:var(--r,4/5);overflow:hidden;background-size:cover;background-position:center;
+    border:1px solid var(--line);background-image:linear-gradient(155deg,#3d2c20,#6b5340);display:flex;align-items:flex-end}
+  .ph .ph-tag{font-size:9px;letter-spacing:.16em;text-transform:uppercase;font-weight:500;color:var(--page);opacity:.85;padding:10px 12px}
+  .ph.filled{border-color:transparent}.ph.filled .ph-tag{display:none}
+
+  header.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;padding:120px 0 60px;position:relative;isolation:isolate;
+    background-image:url('uploads/hf_20260716_201419_28352d81-a256-44c3-bcb5-6c993bdffa93.png.opt.jpg');background-size:cover;background-position:center}
+  header.hero::before{content:"";position:absolute;inset:0;z-index:-1;
+    background:linear-gradient(90deg,rgba(20,12,6,.84) 0%,rgba(20,12,6,.55) 46%,rgba(20,12,6,.3) 100%)}
+  .hero .topline{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-bottom:26px;border-bottom:1px solid var(--line-l);margin-bottom:44px}
+  .hero h1{font-size:clamp(46px,10.6vw,152px);color:var(--page)}
+  .hero .scriptline{font-family:var(--font-script);font-size:clamp(30px,5vw,62px);color:var(--terra);margin-top:8px;line-height:1}
+  .hero .sub{margin-top:30px;max-width:52ch;font-size:16.5px;color:rgba(247,244,238,.82)}
+  .hero .credit{margin-top:44px;padding-top:22px;border-top:1px solid var(--line-l);display:flex;flex-wrap:wrap;gap:12px 40px;align-items:baseline}
+  .hero .credit .v{font-family:var(--font-disp);font-weight:600;text-transform:uppercase;font-size:13px;letter-spacing:-.01em;color:var(--page)}
+  .hero .label{color:rgba(247,244,238,.62)}
+  .fade-load{opacity:0;animation:fu 1s var(--ease) forwards}.fl2{animation-delay:.2s}.fl3{animation-delay:.38s}.fl4{animation-delay:.55s}
+  @keyframes fu{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  .scrollcue{position:absolute;bottom:26px;left:30px}
+
+  section{padding:var(--sect-pad) 0;position:relative;border-top:1px solid var(--line)}
+  .eyeline{display:flex;align-items:baseline;gap:14px;margin-bottom:24px}
+  .eyeline .no{font-family:var(--font-disp);font-weight:600;font-size:12px;color:var(--taupe);letter-spacing:0}
+  .head2{font-size:clamp(26px,4.4vw,50px);max-width:20ch;margin-bottom:18px}
+  .lede{max-width:60ch;font-size:16px;color:var(--mocha);line-height:1.62}
+
+  .dark{background:var(--choco);color:var(--page);border-top-color:transparent}
+  .dark .lede{color:rgba(247,244,238,.72)}
+  .dark .label{color:rgba(247,244,238,.55)}
+  .dark .eyeline .no{color:rgba(247,244,238,.5)}
+  .dark h2,.dark h3,.dark h4{color:var(--page)}
+
+  #read{position:relative;isolation:isolate;border-top-color:transparent;
+    background-image:url('uploads/pasted-1784326451552-0.png.opt.jpg');background-size:cover;background-position:center right;background-attachment:fixed}
+  #read::before{content:"";position:absolute;inset:0;z-index:-1;
+    background:linear-gradient(90deg,rgba(18,11,5,.92) 0%,rgba(18,11,5,.82) 52%,rgba(18,11,5,.66) 100%)}
+  #read .kc-col .tag{color:rgba(247,244,238,.6)}
+  #read .kc-item{border-top-color:var(--line-l)}
+  #read .kc-item .i{color:rgba(247,244,238,.55)}
+  #read .kc-item .t{color:var(--page)}
+  #read .kc-item .d{color:rgba(247,244,238,.82)}
+
+  .toc ol{list-style:none}
+  .toc li{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:baseline;padding:18px 0;border-top:1px solid var(--line);
+    transition:padding-left .5s var(--ease)}
+  .toc li:hover{padding-left:14px}
+  .toc li a[href="#about"]:hover .t,.toc li a[href="#about"]:hover .n{color:var(--pink);transition:color .35s var(--ease)}
+  .toc a{display:contents}
+  .toc .n{font-family:var(--font-disp);font-weight:600;font-size:12px;color:var(--taupe)}
+  .toc .t{font-family:var(--font-disp);font-weight:800;text-transform:uppercase;font-size:clamp(19px,3vw,30px);letter-spacing:-.02em;line-height:1}
+  .toc .d{font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--taupe);text-align:right;max-width:24ch}
+
+  .aboutgrid{display:grid;grid-template-columns:1.35fr 1fr;gap:48px;align-items:start}
+  .aboutgrid p{font-size:16.5px;color:var(--mocha)}.aboutgrid p+p{margin-top:16px}
+  .skilllist{border-top:1px solid var(--line);padding-top:20px}
+  .skilllist ul{list-style:none;columns:2;column-gap:24px;margin-top:14px}
+  .skilllist li{font-family:var(--font-disp);font-weight:500;text-transform:uppercase;font-size:12px;letter-spacing:-.005em;padding:7px 0;border-bottom:1px solid var(--line)}
+  .certs p{font-size:14px;color:var(--taupe);line-height:1.9}
+
+  .aboutcollage{position:relative;margin-top:34px;display:grid;
+    grid-template-columns:minmax(0,1fr) 336px;gap:46px;align-items:start}
+  .col-main p{font-size:16.5px;color:var(--mocha)}.col-main p+p{margin-top:14px}
+
+  .strip{position:absolute;transition:transform .5s var(--ease);will-change:transform}
+  .strip img{width:100%;display:block;border-radius:2px;
+    box-shadow:0 18px 38px -16px rgba(36,22,9,.55),0 2px 5px rgba(36,22,9,.16)}
+  .photocluster{position:relative;height:680px;margin-top:-34px}
+  .strip.a{width:150px;left:2px;top:6px;transform:rotate(-6deg);z-index:2}
+  .strip.b{width:158px;right:0;top:-26px;transform:rotate(5.2deg);z-index:3}
+  .strip:hover{transform:rotate(0) scale(1.045);z-index:9}
+  .tape{position:absolute;left:50%;top:-12px;width:76px;height:24px;transform:translateX(-50%) rotate(-4deg);
+    background:linear-gradient(105deg,rgba(201,169,97,.32),rgba(201,169,97,.18));
+    border-left:1px solid rgba(201,169,97,.4);border-right:1px solid rgba(201,169,97,.4);
+    box-shadow:0 2px 5px rgba(36,22,9,.12)}
+  .strip.b .tape{transform:translateX(-50%) rotate(5deg)}
+  .clusternote{position:absolute;left:6px;bottom:-10px;z-index:4;font-family:"Permanent Marker",cursive;
+    font-size:23px;color:var(--pink);transform:rotate(-5deg);line-height:1;text-shadow:0 1px 0 rgba(217,80,138,.25)}
+
+  .quotehand{margin:26px 0 22px;position:relative}
+  .notecard{position:relative;width:min(100%,470px);aspect-ratio:698/330;
+    background:url('uploads/el-gridnote.png') no-repeat center/contain;margin:8px auto 4px;
+    transform:rotate(0.8deg);filter:drop-shadow(0 14px 22px rgba(36,22,9,.14))}
+  .noteinner{position:absolute;inset:15% 15% 14% 14%;display:flex;flex-direction:column;
+    justify-content:center;align-items:center;text-align:center;transform:rotate(-4.2deg)}
+  .noteinner .kicker{font-family:var(--font-body);font-weight:500;text-transform:uppercase;letter-spacing:.2em;
+    font-size:8.5px;color:var(--taupe);margin-bottom:3px}
+  .noteinner .q{font-family:var(--font-script);font-weight:400;text-transform:none;letter-spacing:0;
+    font-size:clamp(28px,3.5vw,42px);line-height:1.02;color:var(--pink)}
+  .noteinner .q em{font-style:normal;color:var(--pink-deep);white-space:nowrap}
+  .quotehand .cite{margin-top:16px;font-size:13px;line-height:1.72;color:var(--mocha);max-width:52ch}
+  .quotehand .cite b{font-weight:600;color:var(--espresso)}
+
+  .decor{position:absolute;pointer-events:none;user-select:none;z-index:6;filter:drop-shadow(0 6px 10px rgba(36,22,9,.16))}
+  .notecard .sequin{width:86px;right:-30px;bottom:-34px;transform:rotate(16deg);z-index:7}
+  .notecard .lips{width:66px;left:-30px;top:-30px;transform:rotate(-14deg)}
+  .col-main .sstar-1{width:34px;top:-6px;right:8%;transform:rotate(-12deg)}
+  .col-main .stamp{width:78px;left:60%;bottom:2px;transform:rotate(7deg)}
+  .photocluster .xoxo{width:118px;left:-42px;top:-6px;transform:rotate(-8deg);z-index:8}
+  .photocluster .seal{width:82px;right:6px;bottom:2px;transform:rotate(-6deg);z-index:8}
+  .photocluster .sstar-2{width:30px;left:44%;top:40%;transform:rotate(14deg)}
+  .col-main .skilllist{border-top:1px solid var(--line);padding-top:16px}
+
+  .railhint{display:flex;align-items:center;gap:9px;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--taupe);margin:26px 0 16px}
+  .railhint .arrow{animation:nudge 1.8s var(--ease) infinite;display:inline-block}
+  @keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
+  .rail{display:flex;gap:22px;overflow-x:auto;padding:2px 2px 18px;scroll-snap-type:x proximity;cursor:grab;
+    scrollbar-width:thin;scrollbar-color:var(--taupe) transparent}
+  .rail.drag{cursor:grabbing;scroll-snap-type:none}.rail.drag *{pointer-events:none}
+  .rail::-webkit-scrollbar{height:5px}.rail::-webkit-scrollbar-thumb{background:var(--taupe);border-radius:20px}
+  .rail>*{scroll-snap-align:start;flex:0 0 auto}
+
+  .bcard{width:min(84vw,310px)}
+  .bcard .ph{--r:4/5;margin-bottom:16px}
+  .bcard .bh{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+  .bcard h3{font-size:22px}
+  .bcard .num{font-family:var(--font-disp);font-weight:600;font-size:12px;color:var(--taupe)}
+  .bcard .handle{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--taupe);margin:3px 0 12px}
+  .bcard .added{font-size:8px;letter-spacing:.1em;text-transform:uppercase;color:var(--taupe);border:1px solid var(--line);padding:3px 7px;white-space:nowrap}
+  .bcard .row{padding:11px 0;border-top:1px solid var(--line)}
+  .bcard .row .l{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--taupe);margin-bottom:4px}
+  .bcard .row p{font-size:13.5px;color:var(--mocha);line-height:1.5}
+
+  .kc{display:grid;grid-template-columns:1fr 1fr;gap:48px}
+  .kc-col h3{font-size:22px;margin-bottom:3px}
+  .kc-col .tag{font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--taupe);margin-bottom:18px}
+  .kc-item{padding:16px 0;border-top:1px solid var(--line);display:flex;gap:14px}
+  .kc-item .i{font-family:var(--font-disp);font-weight:600;font-size:11px;color:var(--taupe);flex:none;line-height:2}
+  .kc-item .t{font-family:var(--font-disp);font-weight:700;text-transform:uppercase;font-size:13px;letter-spacing:-.01em;margin-bottom:3px}
+  .kc-item .d{font-size:13.5px;color:var(--mocha);line-height:1.5}
+
+  .campmark{text-align:center;padding:8px 0 46px}
+  .campmark .cname{font-size:clamp(38px,8.4vw,116px);color:var(--page)}
+  .campmark .cscript{font-family:var(--font-script);font-size:clamp(26px,4.4vw,54px);color:var(--gold);margin-top:6px;line-height:1}
+  .campmark .csub{margin-top:26px;max-width:54ch;margin-inline:auto;font-size:16px;color:rgba(247,244,238,.75)}
+
+  .chapters{margin-top:20px}
+  .scene{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,72px);align-items:center;
+    padding:clamp(44px,6vw,80px) 0;border-top:1px solid var(--line-l)}
+  .scene .art .ph{--r:4/5}
+  .scene.flip .art{order:2}
+  .sceneidx{display:flex;align-items:baseline;gap:16px;margin-bottom:16px}
+  .sceneidx .bignum{font-family:var(--font-disp);font-weight:800;font-size:clamp(42px,6vw,78px);line-height:.78;color:var(--gold);letter-spacing:-.03em}
+  .scene .copy .chapno{color:rgba(247,244,238,.5);margin-bottom:0}
+  .scene .copy h3{font-size:clamp(26px,4vw,52px);color:var(--page);line-height:.94}
+  .scene .copy .forwho{font-family:var(--font-script);font-size:clamp(22px,3vw,36px);color:var(--terra);margin-top:4px;line-height:1}
+  .voice{margin:30px 0;padding:22px 0 22px 26px;border-left:2px solid var(--gold)}
+  .voice .vline{font-family:var(--font-disp);font-weight:600;text-transform:none;font-size:clamp(21px,2.9vw,34px);letter-spacing:-.015em;
+    line-height:1.18;color:var(--page)}
+  .voice .vtag{font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--taupe);margin-top:10px}
+  .scene .story{font-size:14.5px;color:rgba(247,244,238,.72);line-height:1.6;max-width:46ch}
+  .scene .themes{display:flex;flex-wrap:wrap;gap:7px 14px;margin-top:22px;padding-top:18px;border-top:1px solid var(--line-l)}
+  .scene .themes span{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(247,244,238,.6)}
+  .scene .tira{margin-top:18px;font-size:12.5px;color:var(--gold);display:flex;gap:9px;align-items:baseline}
+  .scene .tira b{font-weight:500;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--taupe);flex:none}
+
+  .thread{margin-top:70px;padding-top:36px;border-top:1px solid var(--line-l)}
+  .threadgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:34px;margin-top:24px}
+  .tstep .tn{font-family:var(--font-script);font-size:32px;color:var(--gold);line-height:1}
+  .tstep p{font-size:13.5px;color:rgba(247,244,238,.72);margin-top:6px;line-height:1.55}
+  .threadline{margin-top:26px;font-family:var(--font-script);font-size:clamp(22px,3vw,34px);color:var(--terra)}
+
+  .cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:36px;margin-top:70px;padding-top:36px;border-top:1px solid var(--line-l)}
+  .cgrid .l{margin-bottom:11px}
+  .cgrid p{font-size:14px;color:rgba(247,244,238,.75);line-height:1.6}
+  .cgrid ul{list-style:none;margin-top:4px}
+  .cgrid li{font-size:13.5px;color:rgba(247,244,238,.75);padding:5px 0 5px 15px;position:relative}
+  .cgrid li::before{content:"—";position:absolute;left:0;color:var(--taupe)}
+  .swatches{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+  .swatch{width:28px;height:28px;border:1px solid var(--line-l);position:relative}
+  .swatch::after{content:attr(data-n);position:absolute;left:0;top:34px;font-size:8px;letter-spacing:.06em;text-transform:uppercase;color:var(--taupe);white-space:nowrap;opacity:0;transition:opacity .3s}
+  .swatch:hover::after{opacity:1}
+
+  .film{margin-top:70px;padding-top:36px;border-top:1px solid var(--line-l)}
+  #conceptfilm{--r:16/9;border-color:var(--line-l);background-image:linear-gradient(150deg,#2e1d10,#5b4130)}
+  .film .cap{margin-top:14px;font-size:11.5px;color:var(--taupe);letter-spacing:.04em}
+
+  .legend{display:flex;flex-wrap:wrap;gap:20px;margin-bottom:30px}
+  .legend span{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--taupe)}
+  .phase{display:grid;grid-template-columns:150px 1fr;gap:34px;padding:26px 0;border-top:1px solid var(--line)}
+  .phase .pw{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--taupe)}
+  .phase .pn{font-family:var(--font-disp);font-weight:800;text-transform:uppercase;font-size:24px;letter-spacing:-.02em;margin:6px 0 8px}
+  .phase .pg{font-size:12.5px;color:var(--taupe);line-height:1.5}
+  .posts{display:flex;flex-direction:column;gap:20px}
+  .post .f{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--taupe);margin-bottom:5px}
+  .post .h{font-family:var(--font-disp);font-weight:600;font-size:16px;letter-spacing:-.01em;line-height:1.25;margin-bottom:5px}
+  .post .w{font-size:13.5px;color:var(--mocha);line-height:1.5}
+  .platforms{display:grid;grid-template-columns:1fr 1fr;gap:48px;margin-top:40px;padding-top:30px;border-top:1px solid var(--line)}
+  .pf h4{font-size:20px;margin-bottom:5px}
+  .pf .pfl{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--taupe);margin-bottom:14px}
+  .pf ul{list-style:none;font-size:14px;color:var(--mocha)}
+  .pf li{padding:8px 0 8px 16px;border-top:1px solid var(--line);position:relative}
+  .pf li::before{content:"—";position:absolute;left:0;color:var(--taupe)}
+
+  .criteria{display:flex;flex-wrap:wrap;gap:8px 20px;margin:22px 0 4px}
+  .criteria span{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--taupe)}
+  .ucard{width:min(70vw,220px)}
+  .ucard .ph{--r:3/4;width:100%;height:auto;border-radius:8px;margin-bottom:14px;box-shadow:0 14px 30px -16px rgba(36,22,9,.5)}
+  .ucard .ph .ph-tag{font-size:7px;padding:5px}
+  .ucard .un{font-family:var(--font-disp);font-weight:600;font-size:11px;color:var(--taupe)}
+  .ucard .uname{font-family:var(--font-disp);font-weight:800;text-transform:uppercase;font-size:15px;letter-spacing:-.02em;margin:3px 0 6px;line-height:1}
+  .ucard .ut{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--taupe);margin-bottom:8px;display:block}
+  .ucard .ud{font-size:12.5px;color:var(--mocha);line-height:1.5}
+
+  .reelrail .reel{width:min(56vw,188px)}
+  .reel .ph{--r:9/16;width:100%;border-radius:8px;margin-bottom:12px;box-shadow:0 16px 32px -16px rgba(36,22,9,.5)}
+  .reel .rl{font-family:var(--font-disp);font-weight:800;text-transform:uppercase;font-size:15px;letter-spacing:-.02em;line-height:1;margin-bottom:6px}
+  .reel .rv{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--pink-deep);margin-bottom:7px;display:block}
+  .reel p{font-size:12px;color:var(--mocha);line-height:1.5}
+
+  .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:34px;margin-bottom:48px}
+  .metric{border-top:1px solid var(--line);padding-top:20px}
+  .metric .big{font-family:var(--font-disp);font-weight:800;letter-spacing:-.045em;font-size:clamp(46px,7.2vw,88px);line-height:.86}
+  .metric .l{font-size:12.5px;color:var(--taupe);margin-top:12px;max-width:24ch;line-height:1.5}
+  .pillars{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:32px 44px}
+  .pillar{border-top:1px solid var(--line);padding-top:18px}
+  .pillar .pn2{font-family:var(--font-disp);font-weight:600;font-size:11px;color:var(--taupe)}
+  .pillar h4{font-size:15px;margin:4px 0 8px}
+  .pillar p{font-size:13.5px;color:var(--mocha);line-height:1.55}
+  .roadmap{margin-top:52px;padding-top:32px;border-top:1px solid var(--line)}
+  .roadmap h3{font-size:20px;margin-bottom:16px}
+  .rstep{display:grid;grid-template-columns:110px 1fr;gap:28px;padding:15px 0;border-top:1px solid var(--line)}
+  .rstep:first-of-type{border-top:none}
+  .rstep .rt{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--taupe)}
+  .rstep p{font-size:14px;color:var(--mocha);line-height:1.55}
+
+  .contact{text-align:center}
+  .contact .big{font-size:clamp(38px,8.4vw,116px);color:var(--page)}
+  .contact .cscript{font-family:var(--font-script);font-size:clamp(26px,4vw,50px);color:var(--gold);margin-top:4px;line-height:1}
+  .contact .sub{margin-top:24px;font-size:15px;color:rgba(247,244,238,.72);max-width:46ch;margin-inline:auto}
+  .cmeta{margin-top:40px;display:flex;flex-wrap:wrap;gap:16px 44px;justify-content:center}
+  .cmeta .k{display:block;margin-bottom:6px}
+  .cmeta .v{font-family:var(--font-disp);font-weight:600;text-transform:uppercase;font-size:13px;letter-spacing:-.01em;color:var(--page)}
+  .signoff{margin-top:46px;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:rgba(247,244,238,.38)}
+
+  @media(max-width:860px){
+    :root{--sect-pad:clamp(48px,13vw,72px)}
+    header.hero{padding:92px 0 44px}
+    .hero .credit{gap:12px 28px}
+    .scene{padding:34px 0}
+    .sceneidx .bignum{font-size:52px}
+    .metrics{gap:26px}.metric .big{font-size:clamp(52px,15vw,72px)}
+    .navlinks{position:fixed;inset:0 0 0 auto;width:min(76vw,285px);flex-direction:column;align-items:flex-start;gap:1px;
+      background:var(--choco);padding:86px 24px;transform:translateX(100%);transition:transform .5s var(--ease)}
+    .navlinks.open{transform:none}.navlinks a{color:var(--page);font-size:14px;padding:12px;opacity:.9}
+    .navtoggle{display:block;z-index:130}
+    .aboutgrid,.kc,.platforms,.phase,.rstep,.scene{grid-template-columns:1fr;gap:24px}
+    .aboutcollage{grid-template-columns:1fr;gap:30px}
+    .photocluster{height:auto;margin-top:0;display:flex;gap:12px;justify-content:center}
+    .strip{position:static}
+    .strip.a{width:46%;top:0;left:0;transform:rotate(-4deg)}
+    .strip.b{width:46%;top:0;transform:rotate(4deg)}
+    .clusternote{display:none}
+    .photocluster .xoxo,.photocluster .seal,.photocluster .sstar-2,.col-main .stamp{display:none}
+    .col-main .sstar-1{display:none}
+    .notecard .sequin{width:64px;right:-14px;bottom:-22px}
+    .notecard .lips{width:52px;left:-12px}
+    .scene.flip .art{order:0}
+    .threadgrid,.metrics{grid-template-columns:1fr;gap:24px}
+    .toc li{grid-template-columns:auto 1fr}.toc .d{display:none}
+    .skilllist ul{columns:1}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .reveal,.stagger>*,.fade-load{opacity:1!important;transform:none!important}.kwi{transform:none!important}
+  }
+</style>
+</helmet>
+
+<div id="progress"></div>
+
+<nav id="nav">
+  <a href="#top" class="brand">PAULINE PTACEK</a>
+  <button class="navtoggle" id="navtoggle" aria-label="Menu">☰</button>
+  <div class="navlinks" id="navlinks">
+    <a href="#about">About</a><a href="#taste">Taste</a><a href="#read">TEARDOWN</a>
+    <a href="#campaign">Campaign</a><a href="#content">Content</a><a href="#casting">Casting</a>
+    <a href="#growth">Growth</a><a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="topline fade-load">
+      <span class="label">Application · saint sass</span>
+      <span class="label">2026</span>
+    </div>
+    <h1 class="disp kinetic" style="width: 1168px; height: 317px">Looks sweet.<br>Talks back.</h1>
+    <div class="scriptline fade-load fl2" style="color: #C9A961">an italian summer with saint sass.</div>
+    <p class="sub fade-load fl3" style="max-width: 1000px; color: #FFFFFF">A speculative campaign for the saint sass <em>Gigi Mesh</em> launch — an Italian summer where every pair of tights tells a different story.<br>This portfolio walks it end to end: concept, content, casting and growth.</p>
+    <div class="credit fade-load fl4">
+      <div><span class="label">Created by</span><br><span class="v">Pauline Ptacek</span></div>
+      <div><span class="label">Role</span><br><span class="v">Junior Social Media Manager</span></div>
+      <div><span class="label">Featured</span><br><span class="v">Looks Sweet. Talks Back.</span></div>
+    </div>
+  </div>
+  <div class="scrollcue"><span class="label">Scroll</span></div>
+</header>
+
+<section id="contents">
+  <div class="wrap toc reveal">
+    <div class="eyeline"><span class="label">Index</span></div>
+    <ol>
+      <li><a href="#about"><span class="n">01</span><span class="t">About Me</span><span class="d">Who I am &amp; how I think</span></a></li>
+      <li><a href="#taste"><span class="n">02</span><span class="t">Taste</span><span class="d" style="max-width: 700px">Brands that shape my eye</span></a></li>
+      <li><a href="#read"><span class="n">03</span><span class="t">TEARDOWN</span><span class="d">A brand teardown</span></a></li>
+      <li><a href="#campaign"><span class="n">04</span><span class="t">The Campaign</span><span class="d">Looks Sweet. Talks Back.</span></a></li>
+      <li><a href="#content"><span class="n">05</span><span class="t">Content Strategy</span><span class="d">Rollout · IG vs TikTok</span></a></li>
+      <li><a href="#casting"><span class="n">06</span><span class="t">Creator Casting</span><span class="d">Influencer &amp; UGC</span></a></li>
+      <li><a href="#growth"><span class="n">07</span><span class="t">Growth</span><span class="d">A 12-month plan</span></a></li>
+      <li><a href="#contact"><span class="n">08</span><span class="t">Contact</span><span class="d">Reach me</span></a></li>
+    </ol>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap reveal">
+    <div class="eyeline"><span class="no">01</span><span class="label">About Me</span></div>
+    <h2 class="head2 kinetic" style="color: #D9508A">Social-first marketer with an eye for attitude.</h2>
+    <div class="aboutcollage" style="margin-top:34px">
+      <div class="col-main">
+        <p>I build brand worlds people want to live in — turning products into moments, captions into culture, and followers into a community. I care about the craft of a scroll-stopping hook as much as the strategy behind a twelve-month growth curve.</p>
+        <p>This portfolio walks through a full campaign for the saint sass <em>Gigi Mesh brown</em> launch — taste, audit, concept, content, casting and growth. My bias: bold over safe, specific over generic, always a little cheeky.</p>
+        <div class="quotehand">
+          <div class="notecard">
+            <div class="noteinner">
+              <span class="kicker">the line that started it all</span>
+              <div class="q">“Mom, I will be a <em>rich man</em>”</div>
+            </div>
+            <img class="decor sequin" src="uploads/el-sequinstar.png" alt="">
+            <img class="decor lips" src="uploads/el-lips.png" alt="">
+          </div>
+          <p class="cite">Honestly? Same energy. saint sass was built on <b>female self-determination</b> — women funding their own dreams, no apologies, no waiting for permission. That's the fire I bring to every feed I touch: make her feel <b>powerful, seen and a little dangerous</b>.</p>
+          <img class="decor sstar-1" src="uploads/el-silverstar-a.png" alt="">
+          <img class="decor stamp" src="uploads/el-heartstamp.png" alt="">
+        </div>
+        <div class="skilllist">
+          <div class="label">Skills</div>
+          <ul>
+            <li>Social Strategy</li><li>Content Creation</li><li>IDEA GENERATION</li><li>Community</li>
+            <li>UGC &amp; Influencer</li><li>TikTok &amp; Reels</li><li>Campaign Concepting</li><li>Analytics</li>
+          </ul>
+        </div>
+      </div>
+      <div class="photocluster">
+        <div class="strip a"><span class="tape"></span><img src="uploads/strip-1.png" alt="Photobooth strip"></div>
+        <div class="strip b"><span class="tape"></span><img src="uploads/strip-2.png" alt="Photobooth strip"></div>
+        
+        
+        <img class="decor sstar-2" src="uploads/el-silverstar-b.png" alt="">
+        <span class="clusternote">that's me →</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="taste">
+  <div class="wrap reveal">
+    <div class="eyeline"><span class="no">02</span><span class="label">Taste</span></div>
+    <h2 class="head2 kinetic">Five accounts I study before posting a thing.</h2>
+    <p class="lede">A mix of giants and cult upstarts — all treating social as a product, not a billboard. What each does well, and the one move a bold lingerie brand could steal.</p>
+    <div class="railhint"><span class="arrow">→</span> Drag · five brands</div>
+    <div class="rail">
+
+      <div class="bcard">
+        <div class="ph filled" style="background-image:url('uploads/hailey-bieber-rhode-647df44556051.jpg.avif.opt.jpg')"><span class="ph-tag">Rhode</span></div>
+        <div class="bh"><h3>Rhode</h3><span class="num">01</span></div>
+        <div class="handle">@rhode · beauty</div>
+        <div class="row"><div class="l">Stands out</div><p>Doesn't follow trends — it sets them. A strict, unwavering brand world you'd recognize with the logo cropped out.</p></div>
+        <div class="row"><div class="l">Does well</div><p>Pairs skincare with food cues — "glazed," "peptide jelly" — activating sensory memory and emotion, so products feel desirable and woven into everyday habits.</p></div>
+        <div class="row"><div class="l">Steal this</div><p>Borrow a language from an unexpected category. Food-coded cues make a product feel tactile and crave-able, never clinical.</p></div>
+      </div>
+
+      <div class="bcard">
+        <div class="ph filled" style="background-image:url('uploads/R2ccX.jpg.webp.opt.jpg')"><span class="ph-tag">Joseph Atelier</span></div>
+        <div class="bh"><h3>Joseph Atelier</h3><span class="num">02</span></div>
+        <div class="handle">@joseph.atelier · Apperal</div>
+        <div class="row"><div class="l">Stands out</div><p>A Berlin sustainable label whose feed reads like an insider scene — cool, understated, never shouty.</p></div>
+        <div class="row"><div class="l">Does well</div><p>Casts friends and creators into a lived-in aesthetic; values shown, not preached. Community-driven, with exclusive member-only drops that reward the insiders.</p></div>
+        <div class="row"><div class="l">Steal this</div><p>Cultivate a scene. Make following feel like belonging to something local and cool — then reward it with member-only drops.</p></div>
+      </div>
+
+      <div class="bcard">
+        <div class="ph filled" style="background-image:url('uploads/Copy-of-6.png.webp.opt.jpg')"><span class="ph-tag">Sleep or Die</span></div>
+        <div class="bh"><h3>Sleep or Die</h3><span class="num">03</span></div>
+        <div class="handle">@haveyouslept · DTC</div>
+        <div class="row"><div class="l">Stands out</div><p>The "Liquid Death of sleep." Took a pastel category and made it loud, sexy and rebellious on purpose.</p></div>
+        <div class="row"><div class="l">Does well</div><p>Bold, loud and deliberately controversial — it turns a sleepy category into a must-have you can't scroll past.</p></div>
+        <div class="row"><div class="l">Steal this</div><p>Be controversial on purpose. Don't try to please everyone — polarize, and the right audience claims you as theirs.</p></div>
+      </div>
+
+      <div class="bcard">
+        <div class="ph filled" style="background-image:url('uploads/HH_Front_d93faf2c-96e4-457c-971d-30093a0d2da3_1000x1000_crop_center.jpg.webp.opt.jpg')"><span class="ph-tag">Good Girl Snacks</span></div>
+        <div class="bh"><h3>Good Girl Snacks</h3><span class="num">04</span></div>
+        <div class="handle">@goodgirlsnacks · "Hot Girl Pickles"</div>
+        <div class="row"><div class="l">Stands out</div><p>Came out of nowhere and made pickles sexy. Total world-building — characters, slang, a "hot girl" universe — around a boring category.</p></div>
+        <div class="row"><div class="l">Does well</div><p>Speaks Gen-Z natively, posts daily, Reels-first, rode founder storytelling to viral growth.</p></div>
+        <div class="row"><div class="l">Steal this</div><p>Speak straight to the right audience and celebrate girlhood loudly. Own a phrase and build a whole world around it.</p></div>
+      </div>
+
+      <div class="bcard">
+        <div class="ph filled" style="background-image:url('uploads/66b629b74e6f5aa0d761e96a_662bc177647cf99a790b9ca1_skims-min.jpeg.opt.jpg')"><span class="ph-tag">Skims</span></div>
+        <div class="bh"><h3>Skims</h3><span class="num">05</span></div>
+        <div class="handle">@skims · shapewear</div>
+        <div class="row"><div class="l">Stands out</div><p>A crystal-clear brand with exciting products — sexy through function, not the male gaze. Not overly provocative; genuinely wearable.</p></div>
+        <div class="row"><div class="l">Does well</div><p>Inclusive casting as standard: every size and tone shot identically, so range reads as effortless.</p></div>
+        <div class="row"><div class="l">Steal this</div><p>Don't design underwear for the male gaze — sell the feeling of being sexy for your own self.</p></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="read" class="dark">
+  <div class="wrap reveal">
+    <div class="eyeline"><span class="no">03</span><span class="label">TEARDOWN</span></div>
+    <h2 class="head2 kinetic">A teardown&nbsp;<br>what I'd keep,&nbsp;<br>what I'd challenge.</h2>
+    <p class="lede">An honest audit of the saint sass presence. The identity is strong; the opportunity is in reach and rhythm, not a rebrand.</p>
+    <div class="kc" style="margin-top:36px">
+      <div class="kc-col">
+        <h3>Keep it</h3><div class="tag">Already working</div>
+        <div class="kc-item"><span class="i">01</span><div><div class="t">Fun, sexy, playful</div><div class="d">The feeling of wearing the pieces comes across instantly.</div></div></div>
+        <div class="kc-item"><span class="i">02</span><div><div class="t">Authentic founder Reels</div><div class="d">Behind-the-scenes content straight from the founder — real, close, and trusted.</div></div></div>
+        <div class="kc-item"><span class="i">03</span><div><div class="t">Product as the hero</div><div class="d">Clean, sensual, premium photography that lets the pieces sell themselves.</div></div></div>
+      </div>
+      <div class="kc-col">
+        <h3>Challenge it</h3><div class="tag">I'd improve</div>
+        <div class="kc-item"><span class="i">01</span><div><div class="t">Protect the visual identity</div><div class="d">The feed is the company's business card — decide on a color palate, keep it clear, clean and consistent, every time.</div></div></div>
+        <div class="kc-item"><span class="i">02</span><div><div class="t">Commit to one brand</div><div class="d">Deciding for one thing means deciding against many — but that builds a language you'd read even with the logo removed.</div></div></div>
+        <div class="kc-item"><span class="i">03</span><div><div class="t">Add Highlights for a quick read</div><div class="d">Instagram Highlights that show how the brand stands out — for example: stars wearing it, hero products, all-time favourites.</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="campaign" class="dark">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyeline"><span class="no">04</span><span class="label">THE CAMPAIGN · GIGI MESH COLLECTION</span></div>
+    </div>
+
+    <div class="campmark reveal">
+      <div class="cname disp kinetic">Looks sweet.<br>Talks back.</div>
+      <div class="cscript">an italian summer.</div>
+      <div class="csub" style="max-width: 900px; text-align: center"><p>At first glance, it feels like a dream — the sparkling ocean, charming cafés, exceptional espresso and long lunches under the sun.&nbsp;<br>But beyond the beauty of the moment lies something deeper:&nbsp;<br>the Gigi Mesh Collection becomes a form of self-expression, capturing the feeling of effortless femininity, connection and escape.<br><br></p><p>With the right details, even a simple summer day with the girls transforms into a romantic Italian getaway&nbsp;<br>and memories that feel timeless.</p></div>
+    </div>
+
+    <div class="chapters">
+
+      <div class="scene reveal">
+        <div class="art"><div class="ph filled" style="background-image:url('uploads/pasted-1784319983588-0.png.opt.jpg')"><span class="ph-tag">Chapter 01 · Girlhood</span></div></div>
+        <div class="copy">
+          <div class="sceneidx"><span class="bignum">01</span><span class="chapno label">Chapter 01</span></div>
+          <h3>Not your<br>business.</h3>
+          <div class="forwho">for the girls.</div>
+          <div class="voice">
+            <div class="vline">The tiramisu is shared.<br>The details aren't.</div>
+            <div class="vtag">Tone of voice — cheeky, self-aware, closed-door</div>
+          </div>
+          <p class="story">A celebration of girlhood. Three friends travel through Italy together, sharing tiramisu, champagne and unforgettable summer memories. Their focus is on themselves — their friendship, freedom, and joy.</p>
+          <div class="tira"><b>Tiramisu</b><span>One large tiramisu, shared between friends.</span></div>
+          <div class="themes">
+            <span>Three friends</span><span>Shared desserts</span><span>Espresso</span><span>Laughter-filled cafés</span>
+            <span>Champagne</span><span>Sunglasses</span><span>Brown looks</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="scene flip reveal">
+        <div class="art"><div class="ph filled" style="background-image:url('uploads/pasted-1784320002504-0.png.opt.jpg')"><span class="ph-tag">Chapter 02 · Arrival</span></div></div>
+        <div class="copy">
+          <div class="sceneidx"><span class="bignum">02</span><span class="chapno label">Chapter 02</span></div>
+          <h3>Enjoy<br>the view.</h3>
+          <div class="forwho">for the connoisseurs.</div>
+          <div class="voice">
+            <div class="vline">Good food.<br>Better company.</div>
+            <div class="vtag">Tone of voice — indulgent, warm, unhurried</div>
+          </div>
+          <p class="story">Long lunches by the ocean, too many plates ordered to share, espresso that never quite ends. La dolce vita, enjoyed slowly with the people who make it taste better.</p>
+          <div class="tira"><b>Tiramisu</b><span>A tiramisu no one wants to take the last spoon of.</span></div>
+          <div class="themes">
+            <span>Ocean-side tables</span><span>Long lunches</span><span>Good company</span><span>Antipasti</span>
+            <span>Espresso</span><span>Golden hour</span><span>Slow indulgence</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="scene reveal">
+        <div class="art"><div class="ph filled" style="background-image:url('uploads/pasted-1784320018259-0.png.opt.jpg')"><span class="ph-tag">Chapter 03 · Adventure</span></div></div>
+        <div class="copy">
+          <div class="sceneidx"><span class="bignum">03</span><span class="chapno label">Chapter 03</span></div>
+          <h3>No risk.<br>No story.</h3>
+          <div class="forwho">for the adventure.</div>
+          <div class="voice">
+            <div class="vline">Some stories begin<br>with a dance.</div>
+            <div class="vtag">Tone of voice — spontaneous, warm, a little daring</div>
+          </div>
+          <p class="story">A chance encounter. One evening, over espresso martinis and music, someone asks her to dance. What follows is a series of spontaneous moments that transform a holiday into a story she never expected.</p>
+          <div class="tira"><b>Tiramisu</b><span>A tiramisu shared on a first date.</span></div>
+          <div class="themes">
+            <span>Espresso martinis</span><span>Dancing</span><span>Rooftop parties</span><span>Vespa rides</span>
+            <span>Coastal streets</span><span>First-date energy</span><span>Summer nights</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="scene flip reveal">
+        <div class="art"><div class="ph filled" style="background-image:url('uploads/pasted-1784320041702-0.png.opt.jpg')"><span class="ph-tag">Chapter 04 · Romance</span></div></div>
+        <div class="copy">
+          <div class="sceneidx"><span class="bignum">04</span><span class="chapno label">Chapter 04</span></div>
+          <h3>Amore.</h3>
+          <div class="forwho">for the romantics.</div>
+          <div class="voice">
+            <div class="vline">The best love stories happen while you're busy living your own.</div>
+            <div class="vtag">Tone of voice — romantic, but never soft</div>
+          </div>
+          <p class="story">The hopeless romantic. What begins as a summer adventure becomes something deeper. Shared rituals, long conversations, coffee dates and slow Italian afternoons tell a love story that develops naturally and authentically.</p>
+          <div class="tira"><b>Tiramisu</b><span>Two spoons in one tiramisu — a ritual between two people.</span></div>
+          <div class="themes">
+            <span>Spaghetti dinners</span><span>Shared tiramisu</span><span>Espresso after meals</span><span>Italian flowers</span>
+            <span>Sunset walks</span><span>Elegant intimacy</span><span>Slow travel romance</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="scene reveal">
+        <div class="art"><div class="ph filled" style="background-image:url('uploads/pasted-1784320060034-0.png.opt.jpg')"><span class="ph-tag">Chapter 05 · The Reveal</span></div></div>
+        <div class="copy">
+          <div class="sceneidx"><span class="bignum">05</span><span class="chapno label">Chapter 05</span></div>
+          <h3>Kiss me.</h3>
+          <div class="forwho">for the finale.</div>
+          <div class="voice">
+            <div class="vline">The sweetest thing<br>on the table.</div>
+            <div class="vtag">Tone of voice — knowing, warm, the last word</div>
+          </div>
+          <p class="story">The reveal. The night winds down, the last espresso martini in hand — and she finally lets the world in on the secret. A confident, unhurried unveiling: the Gigi Mesh lingerie, shown on her own terms. Turns out the sweetest thing on the table was her all along.</p>
+          <div class="tira"><b>Tiramisu</b><span>The dessert is optional. The confidence isn't.</span></div>
+          <div class="themes">
+            <span>Espresso martinis</span><span>Candlelight</span><span>Gold jewellery</span><span>The Gigi Mesh reveal</span>
+            <span>Low light</span><span>A knowing smile</span><span>Last call</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="thread reveal">
+      <div class="label">The recurring symbol</div>
+      <h3 style="font-size:clamp(22px,3.4vw,38px);margin-top:10px">The Gigi Mesh collection is the thread.</h3>
+      <p class="lede" style="margin-top:12px">The collection runs through every chapter: the tights styled into each scene, worn not showcased — and the lingerie held back for the finale. Alongside it, the tastes of an Italian summer recur: tiramisu, espresso, long lunches.</p>
+      <div class="threadgrid">
+        <div class="tstep"><div class="tn">girlhood</div><p>Chapter 01 — tights in the styling, a large tiramisu shared between friends.</p></div>
+        <div class="tstep"><div class="tn">indulgence</div><p>Chapter 02 — tights by the ocean, espresso and long lunches with the girls.</p></div>
+        <div class="tstep"><div class="tn">possibility</div><p>Chapter 03 — tights on the dancefloor, espresso martinis and a love interest showing up. Taking the chance...</p></div>
+        <div class="tstep"><div class="tn">romance</div><p>Chapter 04 — tights at dinner, two spoons in one tiramisu, again and again.&nbsp;</p></div>
+        <div class="tstep"><div class="tn">the reveal</div><p>Chapter 05 — the Gigi Mesh lingerie, finally shown. The collection steps into the light.</p></div>
+      </div>
+      <div class="threadline">the sweetest moments, in order.</div>
+    </div>
+
+    <div class="cgrid reveal">
+      <div>
+        <div class="l label">Tone of voice</div>
+        <p>Sweet, witty, confident, playful. It should sound like the woman wearing the tights: charming, a little sarcastic, unapologetically herself.</p>
+        <ul><li>Effortlessly clever</li><li>Feminine, not overly romantic</li><li>Warm and conversational</li><li>Slightly cheeky</li><li>Confident rather than provocative</li></ul>
+      </div>
+      <div>
+        <div class="l label">Visual direction</div>
+        <p>Italian Summer Editorial — a luxury fashion campaign meets a modern romantic film set in Italy. Positano cafés, Amalfi terraces, sun-drenched piazzas, Vespa rides, espresso bars, candlelit tables.</p>
+        <p style="margin-top:10px">The Gigi Mesh collection runs through every scene — the tights styled in throughout, worn rather than showcased, and the lingerie revealed only at the finale.</p>
+      </div>
+      <div>
+        <div class="l label">Mood &amp; texture</div>
+        <ul><li>Dolce Vita Italy</li><li>Vogue travel stories</li><li>Cocoa powder, linen, silk</li><li>Aged stone, café marble</li><li>Leather, warm sunlight</li></ul>
+      </div>
+      <div>
+        <div class="l label">Colour palette</div>
+        <div class="swatches">
+          <div class="swatch" style="background:#3B2416" data-n="Espresso brown"></div>
+          <div class="swatch" style="background:#241609" data-n="Dark chocolate"></div>
+          <div class="swatch" style="background:#E8DCC8" data-n="Tiramisu cream"></div>
+          <div class="swatch" style="background:#C9A961" data-n="Champagne gold"></div>
+          <div class="swatch" style="background:#E3D2B4" data-n="Sunlit beige"></div>
+          <div class="swatch" style="background:#B5623C" data-n="Terracotta"></div>
+          <div class="swatch" style="background:#43606E" data-n="Mediterranean blue"></div>
+        </div>
+        <p style="margin-top:26px;font-size:12.5px">Hover a swatch for its name.</p>
+      </div>
+    </div>
+
+    <div class="film reveal">
+      <div class="label">The concept film</div>
+      <h3 style="font-size:clamp(20px,3vw,32px);margin:10px 0 20px">The idea in thirty seconds.</h3>
+      <div style="aspect-ratio:16/9;overflow:hidden;border:1px solid var(--line-l)">
+        <iframe src="https://www.youtube.com/embed/WB06FqKHqtA" title="Concept film" style="width:100%;height:100%;border:0;display:block" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture;web-share" allowfullscreen=""></iframe>
+      </div>
+      <p class="cap">Looks Sweet. Talks Back. — an Italian summer where every pair of tights tells a different story.</p>
+    </div>
+
+  </div>
+</section>
+
+<section id="content">
+  <div class="wrap reveal">
+    <div class="eyeline"><span class="no">05</span><span class="label">Content Strategy</span></div>
+    <h2 class="head2 kinetic">A chapter-by-chapter build from whisper to sell-out.</h2>
+    <p class="lede">The five chapters give the rollout its spine: tease the world, release it chapter by chapter, save the reveal for last, then let the audience write the encore. Curiosity first, conversion second.</p>
+
+    <div class="legend" style="margin-top:32px"><span>Wk 1 — Tease</span><span>Wk 2 — Ch 01</span><span>Wk 3 — Ch 02</span><span>Launch — Ch 03</span><span>Wk 4 — Ch 04</span><span>Finale — Ch 05</span></div>
+
+    <div class="stagger">
+      <div class="phase"><div><div class="pw">Week 1</div><div class="pn">Tease</div><div class="pg">Create curiosity. Plant a question no one can scroll past.</div></div>
+        <div class="posts">
+          <div class="post"><div class="f">IG Story · countdown</div><div class="h">"Looks sweet…" — and nothing else.</div><div class="w">The headline withheld half-way. Curiosity plus cheek; the countdown turns followers into a launch list.</div></div>
+          <div class="post"><div class="f">TikTok · tiramisu teaser</div><div class="h">A spoon breaking into tiramisu, an espresso poured, a glimpse of the coast.</div><div class="w">Eating, not making — pure Italian-summer sensory bait. Sound-led and mysterious; rewards saves and "where is this?" comments.</div></div>
+        </div></div>
+      <div class="phase"><div><div class="pw">Week 2</div><div class="pn">Chapter 01</div><div class="pg">Girlhood. Release "Not your business."</div></div>
+        <div class="posts">
+          <div class="post"><div class="f">IG Carousel · the chapter</div><div class="h">"The tiramisu is shared. The details aren't."</div><div class="w">Carousel = dwell = reach. Each slide a quotable, screenshot-ready line from the chapter.</div></div>
+          <div class="post"><div class="f">Creator seeding · embargo</div><div class="h">The cast gets Chapter 01 early; posts go live together.</div><div class="w">A coordinated wave makes the chapter feel like a moment, not an ad.</div></div>
+        </div></div>
+      <div class="phase"><div><div class="pw">Week 3</div><div class="pn">Chapter 02</div><div class="pg">Indulgence. "Enjoy the view."</div></div>
+        <div class="posts">
+          <div class="post"><div class="f">Horizontal video · Reel + TikTok</div><div class="h">A long lunch by the ocean, plates passed around, no rush.</div><div class="w">Landscape video is trending on both platforms — cinematic and cropped for the feed. Sells the mood before the product.</div></div>
+          <div class="post"><div class="f">IG Carousel · the table</div><div class="h">"Order everything. Share most of it."</div><div class="w">Girls-trip warmth; tights styled into the scene, never showcased.</div></div>
+        </div></div>
+      <div class="phase"><div><div class="pw">Launch</div><div class="pn">Chapter 03</div><div class="pg">Adventure. One hero moment, everywhere.</div></div>
+        <div class="posts">
+          <div class="post"><div class="f">Hero film · horizontal Reel + TikTok</div><div class="h">"Some stories begin with a dance."</div><div class="w">The concept film lands as landscape video — the now-trending format — pinned, boosted, cut for every surface.</div></div>
+          <div class="post"><div class="f">IG Carousel · shop-the-drop</div><div class="h">Mesh + tights styled together, swipe to shop.</div><div class="w">Converts three weeks of built curiosity. Clear product, clear link.</div></div>
+        </div></div>
+      <div class="phase"><div><div class="pw">Week 4</div><div class="pn">Chapter 04</div><div class="pg">Romance. "Amore."</div></div>
+        <div class="posts">
+          <div class="post"><div class="f">UGC repost engine</div><div class="h">"Two spoons. One tiramisu. Tag us."</div><div class="w">The ritual becomes a prompt. Social proof at zero production cost, and a reason to post.</div></div>
+          <div class="post"><div class="f">Styling series</div><div class="h">"Five chapters, five ways to wear brown."</div><div class="w">Extends the drop past launch week and adds real utility, not just hype.</div></div>
+        </div></div>
+      <div class="phase"><div><div class="pw">Finale</div><div class="pn">Chapter 05</div><div class="pg">The reveal. "Kiss me."</div></div>
+        <div class="posts">
+          <div class="post"><div class="f">The reveal · Reel + TikTok</div><div class="h">The Gigi Mesh lingerie, finally shown — on her own terms.</div><div class="w">The payoff the whole build earned. Confident, not explicit; the last word of the campaign.</div></div>
+          <div class="post"><div class="f">Community celebration</div><div class="h">"The sweetest thing on the table was her all along."</div><div class="w">Invite the audience to close the story — reposts, comments, the encore.</div></div>
+        </div></div>
+    </div>
+
+    <div class="platforms">
+      <div class="pf"><h4>Instagram</h4><div class="pfl">Curated</div><ul>
+        <li>The editorial — chapters land here first, in full</li>
+        <li>Carousels carry the strategy: dwell, saves, share-to-Story</li>
+        <li>Horizontal video now favoured — cinematic, and trending in-feed</li>
+        <li>Captions do the sass; the grid stays cohesive</li>
+        <li>Home of the concept film and shoppable drops</li></ul></div>
+      <div class="pf"><h4>TikTok</h4><div class="pfl">Unfiltered</div><ul>
+        <li>Behind the Italian summer — raw, fast, funny</li>
+        <li>POVs, GRWM, tiramisu ASMR, creator duets</li>
+        <li>Leaning into landscape video — the format the algorithm is pushing now</li>
+        <li>Speaks in memes and native audio, not voice-overs</li>
+        <li>Built to be found by strangers, not just followers</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="casting">
+  <div class="wrap reveal">
+    <div class="eyeline"><span class="no">06</span><span class="label">Creator Casting</span></div>
+    <h2 class="head2 kinetic">Ten creators across two tiers,&nbsp;<br>cast for fit not follower count.</h2>
+    <p class="lede">Five chapters, five energies — the friends, the connoisseurs, the adventurer, the romantic, the reveal. Cast in two tiers: a home-market roster for cultural fit and trust, and international names for reach and prestige. For a lingerie drop, comfort with intimate content is non-negotiable.</p>
+    <div class="criteria"><span>Comfortable with lingerie content</span><span>Body-positive &amp; inclusive</span><span>Shows the Braun shade well</span><span>Engagement over reach</span><span>On-brand attitude</span></div>
+
+    <div class="eyeline" style="margin-top:38px"><span class="no">A</span><span class="label">National · home-market fit</span></div>
+    <div class="railhint"><span class="arrow">→</span> Drag · five creators</div>
+    <div class="rail">
+      <div class="ucard"><div class="ph filled" style="background-image:url('uploads/pasted-1784324512050-0.png.opt.jpg')"></div><div class="un">01</div><div class="uname">The Comedian</div><span class="ut">Laura (Abla) Schmitt</span><div class="ud">TikTok timing and punchlines. Turns "not your business" into a line people repeat.</div></div>
+      <div class="ucard"><div class="ph filled" style="background-image:url('uploads/pasted-1784323587474-0.png.opt.jpg')"></div><div class="un">02</div><div class="uname">The Cool Girl</div><span class="ut">Shawny Sander</span><div class="ud">Downtown edge. Makes the drop feel like a scene, not an ad.</div></div>
+      <div class="ucard"><div class="ph filled" style="background-image:url('uploads/pasted-1784323628700-0.png.opt.jpg')"></div><div class="un">03</div><div class="uname">The Sassy One</div><span class="ut">Sara Arslan</span><div class="ud">Sharp, cheeky, on-brand attitude — the speaking voice of the campaign.</div></div>
+      <div class="ucard"><div class="ph filled" style="background-image:url('uploads/pasted-1784323669025-0.png.opt.jpg')"></div><div class="un">04</div><div class="uname">The Aesthete</div><span class="ut">Luisa Martha Maier</span><div class="ud">High-fashion stills that carry the Italian editorial look.</div></div>
+      <div class="ucard"><div class="ph filled" style="background-image:url('uploads/pasted-1784324383163-0.png.opt.jpg')"></div><div class="un">05</div><div class="uname">The Confident</div><span class="ut">Stefanie Giesinger</span><div class="ud">Reach with credibility — owns the confident, body-positive energy of the reveal.</div></div>
+    </div>
+
+    <div class="eyeline" style="margin-top:40px"><span class="no">B</span><span class="label">International · reach &amp; prestige</span></div>
+    <div class="railhint"><br></div>
+    <div class="rail">
+      <div class="ucard"><div class="ph filled" style="background-image:url('uploads/pasted-1784323799790-0.png.opt.jpg')"></div><div class="un">06</div><div class="uname">The Clean Girl</div><span class="ut">Hailey Bieber</span><div class="ud">The global clean-girl benchmark — aspirational glaze and mass reach.</div></div>
+      <div class="ucard"><div class="ph filled" style="background-image:url('uploads/pasted-1784323858246-0.png.opt.jpg')"></div><div class="un">07</div><div class="uname">The Cool Girl</div><span class="ut">Kendall Jenner</span><div class="ud">Runway cool — instant prestige for the collection.</div></div>
+      <div class="ucard"><div class="ph filled" style="background-image:url('uploads/pasted-1784324426573-0.png.opt.jpg')"></div><div class="un">08</div><div class="uname">The Confident</div><span class="ut">Ashley Graham</span><div class="ud">Body-positive icon — makes inclusivity real for the reveal, not stated.</div></div>
+      <div class="ucard"><div class="ph filled" style="background-image:url('uploads/pasted-1784323890851-0.png.opt.jpg')"></div><div class="un">09</div><div class="uname">The Aesthete</div><span class="ut">Madison Sarah</span><div class="ud">Editorial eye — cinematic, on-location fashion content.</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="growth">
+  <div class="wrap reveal">
+    <div class="eyeline"><span class="no">07</span><span class="label">Growth</span></div>
+    <h2 class="head2 kinetic">A hundred thousand followers, earned — not bought.</h2>
+    <p class="lede">Follower growth is a lagging metric. It follows reach, and reach follows saves and shares. So the plan optimises for the signals that actually move the account.</p>
+
+    <div class="metrics" style="margin-top:38px">
+      <div class="metric"><div class="big" data-count="100000" data-suffix="K+" data-div="1000">0</div><div class="l">New Instagram followers over twelve months</div></div>
+      <div class="metric"><div class="big" data-count="2" data-suffix="/mo">0</div><div class="l">High-performing pieces per month at 200K+ views</div></div>
+      <div class="metric"><div class="big" data-count="500" data-suffix="K+">0</div><div class="l">View ceiling targeted for signature carousels</div></div>
+    </div>
+
+    <div class="pillars stagger">
+      <div class="pillar"><div class="pn2">01</div><h4>Chapters as formats</h4><p>The campaign proves it: serialised content people wait for. Turn chapters into a repeatable carousel format they save and send.</p></div>
+      <div class="pillar"><div class="pn2">02</div><h4>Post with consistency</h4><p>A steady cadence beats sporadic bursts: a reliable weekly rhythm of Reels, carousels and stories keeps the account active, learning, and in front of the algorithm.</p></div>
+      <div class="pillar"><div class="pn2">03</div><h4>First-second hooks</h4><p>Rewrite the opening frame and line as if it's the only thing anyone sees — because on Reels, it usually is.</p></div>
+      <div class="pillar"><div class="pn2">04</div><h4>Always-on creator engine</h4><p>Rolling roster feeding UGC weekly. Amplify the best via collab posts to borrow their audiences.</p></div>
+      <div class="pillar"><div class="pn2">05</div><h4>Reply like the brand</h4><p>Comment sections as content. In-voice replies get pinned, screenshotted and re-shared — free reach.</p></div>
+      <div class="pillar"><div class="pn2">06</div><h4>Test, read, repeat</h4><p>Weekly review of top and bottom posts. Double down on saves and shares; retire what only gets likes.</p></div>
+    </div>
+
+    <div class="reelblock" style="margin-top:56px">
+      <div class="label">Proven formats — reels that already work</div>
+      <h3 style="font-size:clamp(22px,3.4vw,38px);margin:10px 0 4px">Five viral mechanics, translated for saint sass.</h3>
+      <p class="lede">I studied the best-performing reels in this space. Each one hides a repeatable mechanic — here's how I'd bend it to the campaign.</p>
+      <div class="railhint"><br></div><div class="rail reelrail">
+        <div class="reel"><div class="ph filled" style="background-image:url('uploads/pasted-1784324661913-0.png.opt.jpg')"></div><div class="rl">Be controversial</div><span class="rv">288 Tsd · reference</span><p>Polarise on purpose. A borderline caption is built to be argued about, and the algorithm rewards the fight.</p></div>
+        <div class="reel"><div class="ph filled" style="background-image:url('uploads/pasted-1784324696013-0.png.opt.jpg')"></div><div class="rl">Stand out</div><span class="rv">179 Tsd · reference</span><p>One bold visual, no explanation.&nbsp;<br>A loud image that stops the scroll and gets stitched.</p></div>
+        <div class="reel"><div class="ph filled" style="background-image:url('uploads/pasted-1784324720263-0.png.opt.jpg')"></div><div class="rl">Be authentic</div><span class="rv">124 Tsd · reference</span><p>Founder-POV, unfiltered. The "Mom: how was the weekend?" format is native, funny and trusted — exactly saint sass' voice.</p></div>
+        <div class="reel"><div class="ph filled" style="background-image:url('uploads/pasted-1784324742022-0.png.opt.jpg')"></div><div class="rl">Take the community</div><span class="rv">158 Tsd · reference</span><p>Bring them on the trip. "Come with me" diaries turn followers into companions — the girls'-trip chapters, in real time.</p></div>
+        <div class="reel"><div class="ph filled" style="background-image:url('uploads/pasted-1784324756195-0.png.opt.jpg')"></div><div class="rl">Show heritage</div><span class="rv">577 Tsd · reference</span><p>Own where you're from. "Oktoberfest but make it Berlin" flexes German roots — heritage localised, and highly shareable.</p></div>
+      </div>
+      
+    </div>
+
+    <div class="roadmap">
+      <h3>The first ninety days</h3>
+      <div class="rstep"><div class="rt">Days 1–30</div><p>Audit the last six months, define four to five content pillars, ship three repeatable carousel formats, stand up the creator roster.</p></div>
+      <div class="rstep"><div class="rt">Days 31–60</div><p>Lock the rollout, launch a consistent weekly posting rhythm, start systematic in-voice community replies.</p></div>
+      <div class="rstep"><div class="rt">Days 61–90</div><p>Read the data, kill what underperforms, scale the top format, turn the best UGC into always-on collab reach.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="dark contact">
+  <div class="wrap reveal">
+    <div class="eyeline" style="justify-content:center"><span class="label">08 · Contact</span></div>
+    <div class="big disp kinetic" style="height: 250px">Looks sweet.<br>Talks back.</div>
+    <div class="cscript">coming soon. let's talk.</div>
+    <p class="sub" style="max-width: 700px">Thank you for taking the time to go though my work. <br>If the you enjoyed the campaign and see a fit for saint sass,<br>&nbsp;I'd love to hear from you.</p>
+    <div class="cmeta">
+      <div><span class="k label">Name</span><font face="Archivo, Helvetica, sans-serif"><span style="font-size: 13px; letter-spacing: -0.13px; text-transform: uppercase;"><b>Pauline ptacek</b></span></font></div>
+      <div><span class="k label">Email</span><span class="v">PAULINE.PTACEK@ICLOUD.COM</span></div>
+      <div><span class="k label">Instagram</span><span class="v">@ST.PAULINE_CHARLOTTE</span></div>
+      <div><span class="k label">LINKED IN</span><span class="v">PAULINE PTACEK</span></div>
+    </div>
+    <div class="signoff">Application&nbsp;<span style="letter-spacing: 1.9px;">· saint sass&nbsp;</span>· 2026 · featured campaign: saint sass — Looks Sweet. Talks Back.</div>
+  </div>
+</section>
+<template id="__bundler_thumbnail">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#241609"/><text x="50" y="44" font-family="Archivo, sans-serif" font-size="15" font-weight="800" fill="#F7F4EE" text-anchor="middle">LOOKS</text><text x="50" y="62" font-family="Archivo, sans-serif" font-size="15" font-weight="800" fill="#D9508A" text-anchor="middle">SWEET</text></svg>
+</template>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  componentDidMount(){
+    const root = document;
+    const progress = root.getElementById('progress');
+    const nav = root.getElementById('nav');
+    const onScroll = () => {
+      const h = document.documentElement;
+      if(progress) progress.style.width = (h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';
+      if(nav) nav.classList.toggle('scrolled', h.scrollTop>40);
+    };
+    window.addEventListener('scroll', onScroll, {passive:true});
+    onScroll();
+    this._onScroll = onScroll;
+
+    const toggle = root.getElementById('navtoggle');
+    const links = root.getElementById('navlinks');
+    if(toggle && links){
+      toggle.addEventListener('click', ()=>{
+        const o = links.classList.toggle('open');
+        toggle.textContent = o ? '✕' : '☰';
+      });
+      links.querySelectorAll('a').forEach(a=>a.addEventListener('click', ()=>{
+        links.classList.remove('open'); toggle.textContent='☰';
+      }));
+    }
+
+    function kineticSplit(el){
+      const frag = document.createDocumentFragment(); let i=0;
+      el.childNodes.forEach(node=>{
+        if(node.nodeType===3){
+          node.textContent.split(/(\s+)/).forEach(tok=>{
+            if(tok==='')return;
+            if(!tok.trim()){frag.appendChild(document.createTextNode(tok));return;}
+            const w=document.createElement('span');w.className='kw';
+            const inner=document.createElement('span');inner.className='kwi';inner.style.setProperty('--i',i++);inner.textContent=tok;
+            w.appendChild(inner);frag.appendChild(w);
+          });
+        } else if(node.nodeName==='BR'){frag.appendChild(node.cloneNode());}
+        else{const w=document.createElement('span');w.className='kw';const inner=node.cloneNode(true);inner.classList.add('kwi');inner.style.setProperty('--i',i++);w.appendChild(inner);frag.appendChild(w);}
+      });
+      el.innerHTML=''; el.appendChild(frag);
+    }
+    root.querySelectorAll('.kinetic').forEach(kineticSplit);
+
+    const io = new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.12,rootMargin:'0px 0px -50px 0px'});
+    root.querySelectorAll('.reveal,.stagger,.kinetic').forEach(el=>io.observe(el));
+    this._io = io;
+
+    root.querySelectorAll('.rail').forEach(rail=>{
+      let down=false,startX=0,startScroll=0;
+      rail.addEventListener('pointerdown',e=>{down=true;startX=e.clientX;startScroll=rail.scrollLeft;rail.setPointerCapture(e.pointerId);});
+      rail.addEventListener('pointermove',e=>{if(!down)return;const dx=e.clientX-startX;if(Math.abs(dx)>4)rail.classList.add('drag');rail.scrollLeft=startScroll-dx;});
+      const up=()=>{down=false;setTimeout(()=>rail.classList.remove('drag'),40);};
+      rail.addEventListener('pointerup',up);rail.addEventListener('pointercancel',up);rail.addEventListener('pointerleave',()=>{if(down)up();});
+      rail.addEventListener('wheel',e=>{if(Math.abs(e.deltaY)>Math.abs(e.deltaX)){rail.scrollLeft+=e.deltaY;e.preventDefault();}},{passive:false});
+    });
+
+    const cio = new IntersectionObserver(es=>{es.forEach(e=>{
+      if(!e.isIntersecting)return;const el=e.target;const target=+el.dataset.count,suffix=el.dataset.suffix||'',div=+(el.dataset.div||1);
+      const dur=1500,start=performance.now();
+      function tick(now){const p=Math.min((now-start)/dur,1),eased=1-Math.pow(1-p,3);el.textContent=Math.round(target*eased/div)+(p===1?suffix:'');if(p<1)requestAnimationFrame(tick);else el.textContent=Math.round(target/div)+suffix;}
+      requestAnimationFrame(tick);cio.unobserve(el);
+    });},{threshold:.6});
+    root.querySelectorAll('[data-count]').forEach(c=>cio.observe(c));
+    this._cio = cio;
+  }
+  componentWillUnmount(){
+    if(this._onScroll) window.removeEventListener('scroll', this._onScroll);
+    if(this._io) this._io.disconnect();
+    if(this._cio) this._cio.disconnect();
+  }
+}
+</script>
+</body>
+</html>
